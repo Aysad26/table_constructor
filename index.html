@@ -112,7 +112,7 @@
             //Подстолье
             const base = new GLTFLoader();
             var mesh2;
-            base.load('/model/base.gltf', gltf => {
+            base.load('./model/base.gltf', gltf => {
               const mesh2 = gltf.scene;
               mesh2.name = "mesh2";
               scene.add(gltf.scene);
