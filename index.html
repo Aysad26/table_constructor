@@ -111,18 +111,17 @@
 
             //Подстолье
             const base = new GLTFLoader();
-            var mesh2;
-            base.load('./model/base.gltf', gltf => {
-              const mesh2 = gltf.scene;
-              mesh2.name = "mesh2";
-              scene.add(gltf.scene);
-              mesh2.visible = true;
-              //Навешиваем слушатели на кнопки
-              document.getElementById("due").addEventListener("click", function(){mesh2.visible = !mesh2.visible;});
-              }, 
-              function (error) {
-                console.log ('Error: ' + error)
-              })
+                var mesh2;
+                base.load('./model/base.gltf', gltf => {
+                const mesh2 = gltf.scene;
+                mesh2.name = "mesh2";
+                scene.add(gltf.scene);
+                mesh2.visible = true;
+                }, 
+                    function (error) {
+                        console.log('Error: ' + error)
+                    }
+                )
             
             //Источник света
             const light = new THREE.DirectionalLight(0xffffff, 2)
