@@ -61,8 +61,20 @@
             scene.background = new THREE.Color("#E2DFE1");
 
             //Camera
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.2, 3000);
-            camera.position.set(0.5, 0.8, 1.5)
+            const aspectRatio = window.innerWidth / window.innerHeight;
+const cameraWidth = 150;
+const cameraHeight = cameraWidth / aspectRatio;
+
+const camera = new THREE.OrthographicCamera(
+  cameraWidth / -2, // left
+  cameraWidth / 2, // right
+  cameraHeight / 2, // top
+  cameraHeight / -2, // bottom
+  0, // near plane
+  1000 // far plane
+);
+camera.position.set(200, 200, 200);
+camera.lookAt(0, 10, 0);
 
             //render
             const renderer = new THREE.WebGLRenderer({antialias: true})
@@ -76,25 +88,60 @@
             const textureWhite = textureLoader.load( "./model/textures/Oak (42)_5_medium.jpg" );
                           
             // Model
-           
-
-           
-
-            //Подстолье
-            const rectangle = new GLTFLoader();
-                var mesh3;
-                rectangle.load('./model/rectangle.gltf', gltf => {
-                const mesh2 = gltf.scene;
-                mesh2.name = "mesh3";
-                scene.add(gltf.scene);
-                mesh3.visible = true;
-                mesh3.traverse(child => {
-                  if (child && child.name != '2000x900_table') {
-                    chuld.visible = true;
+            //Столешница
+            const table = new GLTFLoader();
+            var mesh1;
+            table.load('./model/table.gltf', gltf => {
+              const mesh1 = gltf.scene;
+              mesh1.name = "mesh1";
+              scene.add(mesh1);
+              mesh1.visible = true;
+              //Навешиваем слушатели на кнопки выбора материала
+              document.getElementById("uno").addEventListener("click", function(){mesh1.visible = !mesh1.visible;});
+              document.getElementById("tre").addEventListener("click", function(){
+                mesh1.traverse(child => {
+                  if (child.material && child.material.map.name != 'terra') {
+                    child.material.map = textureDark;
+                    child.material.map.name = 'Terra';
+                    textureDark.flipY = false;
                     textureDark.encoding = THREE.sRGBEncoding;
                   }
                 });
-               
+              });
+              document.getElementById("quatro").addEventListener("click", function(){
+                mesh1.traverse(child => {
+                  if (child.material && child.material.map.name != 'silk-matte nocolor') {
+                    child.material.map = textureLight;
+                    child.material.map.name = 'silk-matte nocolor';
+                    textureLight.flipY = false;
+                    textureLight.encoding = THREE.sRGBEncoding;
+                  }
+                });
+              });
+              document.getElementById("cinque").addEventListener("click", function(){
+                mesh1.traverse(child => {
+                  if (child.material && child.material.map.name != 'white') {
+                    child.material.map = textureWhite;
+                    child.material.map.name = 'white';
+                    textureWhite.flipY = false;
+                    textureWhite.encoding = THREE.sRGBEncoding;
+                  }
+                });
+              });
+            }, 
+            function (error) {
+              console.log ('Error: ' + error)
+            })
+
+            //Подстолье
+            const base = new GLTFLoader();
+                var mesh2;
+                base.load('./model/base.gltf', gltf => {
+                const mesh2 = gltf.scene;
+                mesh2.name = "mesh2";
+                scene.add(gltf.scene);
+                mesh2.visible = true;
+                document.getElementById("due").addEventListener("click", function(){mesh2.visible = !mesh2.visible;});
                 }, 
                     function (error) {
                         console.log('Error: ' + error)
@@ -130,7 +177,7 @@
             //OrbitControls
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 2;
+            controls.autoRotateSpeed = 5;
             controls.enableDamping = true;
 
             //Resize
