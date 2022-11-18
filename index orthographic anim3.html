@@ -93,9 +93,8 @@ camera.lookAt(0, 0, 0);
               gltf.animations.forEach((clip) => {
                   //mixer.clipAction(clip).play(); 
                   var action = mixer.clipAction(clip);
-                  action.play();
-
                   createAnimation(mixer, action, clip);
+                  action.play();
                 });
               scene.add(mesh1);
             }, 
@@ -133,21 +132,13 @@ camera.lookAt(0, 0, 0);
             //OrbitControls
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.autoRotate = false;
-            controls.autoRotateSpeed = 5;
+            controls.autoRotateSpeed = 1;
             controls.enableDamping = true;
             controls.enableRotate = false;
             controls.enableZoom = false;
             
 
-            //Resize
-            window.addEventListener('resize', onWindowResize, false)
-            
-            function onWindowResize() {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-
-                renderer.setSize(window.innerWidth, window.innerHeight)
-            }
+      
 
             // Animate
             function animate() {
@@ -161,19 +152,9 @@ camera.lookAt(0, 0, 0);
             }
             animate()
 
-           
+   }
 
-        }
-
-        window.addEventListener("resize", function () {
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-});
-
-        function createAnimation(mixer, action, clip) {
+function createAnimation(mixer, action, clip) {
   let proxy = {
     get time() {
       return mixer.time;
@@ -189,12 +170,12 @@ camera.lookAt(0, 0, 0);
     scrollTrigger: {
       trigger: ".container",
       start: "top top",
-      end: "+=500%",
+      end: "+=100%",
       pin: true,
       scrub: true,
       markers: true,
       onUpdate: function () {
-        camera.updateProjectionMatrix();
+       
         console.log(proxy.time)
       }
     }
@@ -202,11 +183,11 @@ camera.lookAt(0, 0, 0);
 
   scrollingTL.to(proxy, {
     time: clip.duration,
-    repeat: 3,
+    
   });
 }
 
-        init()
-    </script>
+init()
+</script>
 </body>
 </html>
