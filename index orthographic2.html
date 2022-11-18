@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table-constructor</title>
+</head>
+<body>
+
+    <style>
+        * {margin:0;padding:0;}
+
+        body {overflow: hidden; position: relative;}
+
+        .container {width: 100%; height: 100vh;}
+
+       
+    </style>
+
+   
+    <div class="container"></div>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.139.0/build/three.module.js",
+                "OrbitControls": "https://unpkg.com/three@0.139.0/examples/jsm/controls/OrbitControls.js",
+                "GLTFLoader": "https://unpkg.com/three@0.139.0/examples/jsm/loaders/GLTFLoader.js",
+                "RectAreaLightHelper": "https://unpkg.com/three@0.139.0/examples/jsm/helpers/RectAreaLightHelper.js",
+                "RectAreaLightUniformsLib": "https://unpkg.com/three@0.139.0/examples/jsm/lights/RectAreaLightUniformsLib.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+
+        import * as THREE from 'three';
+        import { OrbitControls } from 'OrbitControls';
+        import { GLTFLoader } from 'GLTFLoader';
+        import { RectAreaLightHelper } from 'RectAreaLightHelper';
+        import { RectAreaLightUniformsLib } from 'RectAreaLightUniformsLib';
+
+        function init() {
+            let container = document.querySelector('.container');
+
+            //Scene
+            const scene = new THREE.Scene()
+            scene.background = new THREE.Color("#E2DFE1");
+
+            //Camera
+            const aspectRatio = window.innerWidth / window.innerHeight;
+const cameraWidth = 0.2;
+const cameraHeight = cameraWidth / aspectRatio;
+
+const camera = new THREE.OrthographicCamera(
+  cameraWidth / -1, // left
+  cameraWidth / 1, // right
+  cameraHeight / 1, // top
+  cameraHeight / -1, // bottom
+  0, // near plane
+  1000 // far plane
+);
+camera.position.set(0.2, 0.2, 0.2);
+camera.lookAt(0, 0, 0);
+
+            //render
+            const renderer = new THREE.WebGLRenderer({antialias: true})
+            renderer.setSize(window.innerWidth, window.innerHeight)
+            container.appendChild(renderer.domElement)
+            renderer.outputEncoding = THREE.sRGBEncoding;;
+
+            const textureLoader = new THREE.TextureLoader();
+            const textureDark = textureLoader.load( "./model/textures/dark.jpg" );
+            const textureLight = textureLoader.load( "./model/textures/Oak (42)_medium.jpg" );
+            const textureWhite = textureLoader.load( "./model/textures/Oak (42)_5_medium.jpg" );
+                          
+            // Model
+            //Столешница
+            const table = new GLTFLoader();
+            var mesh1;
+            table.load('./model/trainuno.glb', gltf => {
+              const mesh1 = gltf.scene;
+              mesh1.name = "mesh1";
+              scene.add(mesh1);
+              mesh1.visible = true;
+              
+            }, 
+            function (error) {
+              console.log ('Error: ' + error)
+            })
+
+                        
+            //Источник света
+            const light = new THREE.DirectionalLight(0xffffff, 1)
+            light.position.set(5, 3, 0)
+            light.lookAt(0, 0, 0)
+            scene.add(light)
+            // Helper
+            // const helper = new THREE.DirectionalLightHelper(light, 5)
+            // scene.add(helper)
+            
+
+           
+            RectAreaLightUniformsLib.init();
+            {
+                const rectLight = new THREE.RectAreaLight(0xffffff, 0.5, 100, 100);
+                rectLight.position.set(-10,0,0)
+                rectLight.rotation.y = Math.PI + Math.PI/4;
+                scene.add(rectLight)
+            }
+
+            {
+                const rectLight = new THREE.RectAreaLight(0xffffff, 0.5, 100, 100);
+                rectLight.position.set(10,0,0)
+                rectLight.rotation.y = Math.PI - Math.PI/4;
+                scene.add(rectLight)
+            }
+            
+            //OrbitControls
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.autoRotate = false;
+            controls.autoRotateSpeed = 5;
+            controls.enableDamping = true;
+            controls.enableRotate = false;
+            controls.enableZoom = false;
+            
+
+            //Resize
+            window.addEventListener('resize', onWindowResize, false)
+            
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                renderer.setSize(window.innerWidth, window.innerHeight)
+            }
+
+            // Animate
+            function animate() {
+                requestAnimationFrame(animate)
+                controls.update();
+                renderer.render(scene, camera)
+            }
+            animate()
+
+           
+
+        }
+
+        init()
+    </script>
+</body>
+</html>

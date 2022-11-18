@@ -62,19 +62,19 @@
 
             //Camera
             const aspectRatio = window.innerWidth / window.innerHeight;
-const cameraWidth = 150;
+const cameraWidth = 0.2;
 const cameraHeight = cameraWidth / aspectRatio;
 
 const camera = new THREE.OrthographicCamera(
-  cameraWidth / -2, // left
-  cameraWidth / 2, // right
-  cameraHeight / 2, // top
-  cameraHeight / -2, // bottom
+  cameraWidth / -1, // left
+  cameraWidth / 1, // right
+  cameraHeight / 1, // top
+  cameraHeight / -1, // bottom
   0, // near plane
   1000 // far plane
 );
-camera.position.set(200, 200, 200);
-camera.lookAt(0, 10, 0);
+camera.position.set(0.2, 0.2, 0.2);
+camera.lookAt(0, 0, 0);
 
             //render
             const renderer = new THREE.WebGLRenderer({antialias: true})
@@ -91,63 +91,18 @@ camera.lookAt(0, 10, 0);
             //Столешница
             const table = new GLTFLoader();
             var mesh1;
-            table.load('./model/table.gltf', gltf => {
+            table.load('./model/trainuno.glb', gltf => {
               const mesh1 = gltf.scene;
               mesh1.name = "mesh1";
               scene.add(mesh1);
               mesh1.visible = true;
-              //Навешиваем слушатели на кнопки выбора материала
-              document.getElementById("uno").addEventListener("click", function(){mesh1.visible = !mesh1.visible;});
-              document.getElementById("tre").addEventListener("click", function(){
-                mesh1.traverse(child => {
-                  if (child.material && child.material.map.name != 'terra') {
-                    child.material.map = textureDark;
-                    child.material.map.name = 'Terra';
-                    textureDark.flipY = false;
-                    textureDark.encoding = THREE.sRGBEncoding;
-                  }
-                });
-              });
-              document.getElementById("quatro").addEventListener("click", function(){
-                mesh1.traverse(child => {
-                  if (child.material && child.material.map.name != 'silk-matte nocolor') {
-                    child.material.map = textureLight;
-                    child.material.map.name = 'silk-matte nocolor';
-                    textureLight.flipY = false;
-                    textureLight.encoding = THREE.sRGBEncoding;
-                  }
-                });
-              });
-              document.getElementById("cinque").addEventListener("click", function(){
-                mesh1.traverse(child => {
-                  if (child.material && child.material.map.name != 'white') {
-                    child.material.map = textureWhite;
-                    child.material.map.name = 'white';
-                    textureWhite.flipY = false;
-                    textureWhite.encoding = THREE.sRGBEncoding;
-                  }
-                });
-              });
+              
             }, 
             function (error) {
               console.log ('Error: ' + error)
             })
 
-            //Подстолье
-            const base = new GLTFLoader();
-                var mesh2;
-                base.load('./model/base.gltf', gltf => {
-                const mesh2 = gltf.scene;
-                mesh2.name = "mesh2";
-                scene.add(gltf.scene);
-                mesh2.visible = true;
-                document.getElementById("due").addEventListener("click", function(){mesh2.visible = !mesh2.visible;});
-                }, 
-                    function (error) {
-                        console.log('Error: ' + error)
-                    }
-                )
-            
+                        
             //Источник света
             const light = new THREE.DirectionalLight(0xffffff, 1)
             light.position.set(5, 3, 0)
@@ -176,7 +131,7 @@ camera.lookAt(0, 10, 0);
             
             //OrbitControls
             const controls = new OrbitControls(camera, renderer.domElement);
-            controls.autoRotate = true;
+            controls.autoRotate = false;
             controls.autoRotateSpeed = 5;
             controls.enableDamping = true;
 
