@@ -154,8 +154,10 @@ camera.lookAt(0, 0, 0);
                 requestAnimationFrame(animate)
                 controls.update();
                 var delta = clock.getDelta();
-                mixer.update( delta );
-                renderer.render(scene, camera)
+  if (mixer != null) mixer.update(delta);
+  
+
+  renderer.render(scene, camera);
             }
             animate()
 
