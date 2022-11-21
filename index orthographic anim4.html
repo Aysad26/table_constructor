@@ -26,25 +26,10 @@
     </style>
     
     
-    <div class="container"></div>
-    <div class="section">
-      <div class="content">
-        <h1 class="section-header">Какой-то заголовок длнный или не слишком</h1>
-        <p class="section-text">Ру́сская Википе́дия — русскоязычный раздел Википедии, основанный 11 мая 2001 года. Входит в десятку самых крупных языковых разделов Википедии по всем основным показателям. Используется MediaWiki с рядом расширений. Включает в себя 1 867 178 статей, а также служебные страницы. </p>
-      </div>
+    <div class="container">
+      
     </div>
-    <div class="section">
-      <div class="content">
-        <h1 class="section-header">Какой-то заголовок длнный или не слишком</h1>
-        <p class="section-text">Ру́сская Википе́дия — русскоязычный раздел Википедии, основанный 11 мая 2001 года. Входит в десятку самых крупных языковых разделов Википедии по всем основным показателям. Используется MediaWiki с рядом расширений. Включает в себя 1 867 178 статей, а также служебные страницы. </p>
-      </div>
-    </div>
-    <div class="section">
-      <div class="content">
-        <h1 class="section-header">Какой-то заголовок длнный или не слишком</h1>
-        <p class="section-text">Ру́сская Википе́дия — русскоязычный раздел Википедии, основанный 11 мая 2001 года. Входит в десятку самых крупных языковых разделов Википедии по всем основным показателям. Используется MediaWiki с рядом расширений. Включает в себя 1 867 178 статей, а также служебные страницы. </p>
-      </div>
-    </div>
+    
     
     
     <script type="importmap">
@@ -196,11 +181,13 @@ function createAnimation(mixer, action, clip) {
     }
   };
 
+  const y = window.pageYOffset;
+
   let scrollingTL = gsap.timeline({
     scrollTrigger: {
-      trigger: ".body",
+      trigger: ".html",
       start: "top top",
-      end: "+=400%",
+      end: "1000",
       pin: true,
       scrub: true,
       markers: true,
